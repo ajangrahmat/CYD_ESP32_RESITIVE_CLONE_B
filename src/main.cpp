@@ -11,9 +11,8 @@
 // =======================
 // KONFIGURASI
 // =======================
-#define WIFI_SSID     "Kelas Robot"
-#define WIFI_PASS     "kumaha aa we"
-
+#define WIFI_SSID     "isi nama wifi kamu"
+#define WIFI_PASS     "isi password wifi kamu"
 #define REFRESH_MS    300000
 #define TIME_UPDATE_MS 1000
 
