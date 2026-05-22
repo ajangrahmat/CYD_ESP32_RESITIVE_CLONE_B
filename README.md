@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📘 CYD LVGL Arduino
 
 Proyek berbasis **ESP32** dengan dukungan:
