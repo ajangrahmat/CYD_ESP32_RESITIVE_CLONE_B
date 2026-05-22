@@ -1,140 +1,114 @@
-# 📘 Panduan Proyek CYD LVGL Arduino
+# 📘 CYD LVGL Arduino
 
-## 📋 Daftar Isi
-1. [Pengenalan Proyek](#pengenalan-proyek)
-2. [Hardware yang Digunakan](#hardware-yang-digunakan)
-3. [Setup dan Instalasi](#setup-dan-instalasi)
-4. [Konfigurasi Pin](#konfigurasi-pin)
-5. [Fitur Utama](#fitur-utama)
-6. [Cara Menggunakan](#cara-menggunakan)
-7. [Troubleshooting](#troubleshooting)
+Proyek berbasis **ESP32** dengan dukungan:
 
----
+* 📺 TFT Display 320×240
+* 👆 Touchscreen XPT2046
+* 💡 Sensor LDR
+* 📡 WiFi & Cloud
+* 💾 SD Card Storage
 
-## 🎯 Pengenalan Proyek
+Cocok untuk:
 
-**CYD LVGL Arduino** adalah proyek berbasis **ESP32** yang mengintegrasikan:
-- **TFT Display** 320×240 (ILI9342) untuk tampilan visual
-- **Touchscreen** XPT2046 untuk input pengguna
-- **Sensor LDR** untuk membaca intensitas cahaya
-- **WiFi & Cloud Connectivity** untuk sinkronisasi data
-- **SD Card Support** untuk penyimpanan data lokal
-
-Proyek ini cocok untuk:
-- Dashboard IoT portabel
-- Monitoring sensor real-time
-- Aplikasi interaktif embedded
+* Dashboard IoT
+* Monitoring sensor
+* Human Machine Interface (HMI)
+* Embedded GUI dengan LVGL
 
 ---
 
-## 🔧 Hardware yang Digunakan
+# 📋 Daftar Isi
 
-### 1. ESP32 Dev Board
-- Microcontroller: ESP32 (Dual-core 240MHz)
-- RAM: 520KB SRAM
-- Flash: 4MB
-- GPIO: 36 pin (configurable)
-- ADC: 12-bit, resolusi 4096 step
-
-### 2. TFT Display (ILI9342)
-| Spesifikasi | Nilai |
-|------------|-------|
-| Resolusi | 320 × 240 pixel |
-| Driver | ILI9342 |
-| Interface | SPI |
-| Voltage | 3.3V |
-
-**Pin Koneksi TFT:**
-| Pin TFT | GPIO ESP32 | Fungsi |
-|---------|-----------|--------|
-| MISO | 12 | Data In |
-| MOSI | 13 | Data Out |
-| SCLK | 14 | Clock |
-| CS | 15 | Chip Select |
-| DC | 2 | Data/Command |
-| RST | - | Reset (tidak digunakan) |
-| BL | 27 | Backlight Control |
-| GND | GND | Ground |
-| VCC | 3.3V | Power |
-
-### 3. Touchscreen (XPT2046)
-| Pin Touchscreen | GPIO ESP32 | Fungsi |
-|-----------------|-----------|--------|
-| CS | 33 | Chip Select |
-| DIN | 13 | Data In (MOSI) |
-| DOUT | 12 | Data Out (MISO) |
-| CLK | 14 | Clock (SCLK) |
-| GND | GND | Ground |
-| VCC | 3.3V | Power |
-
-### 4. Sensor LDR
-| Pin LDR | GPIO ESP32 | Fungsi |
-|---------|-----------|--------|
-| Signal | 34 | ADC0 - Membaca intensitas cahaya |
-| GND | GND | Ground |
-
-### 5. SD Card Module (Optional)
-| Pin SD | GPIO ESP32 | Fungsi |
-|--------|-----------|--------|
-| CS | 5 | Chip Select |
-| MOSI | 13 | Data Out |
-| MISO | 12 | Data In |
-| CLK | 14 | Clock |
+1. [Hardware](#-hardware)
+2. [Konfigurasi Pin](#-konfigurasi-pin)
+3. [Setup Project](#-setup-project)
+4. [Build & Upload](#-build--upload)
+5. [Fitur](#-fitur)
+6. [Testing](#-testing)
+7. [Troubleshooting](#-troubleshooting)
+8. [Referensi](#-referensi)
 
 ---
 
-## 🚀 Setup dan Instalasi
+# 🔧 Hardware
 
-### Prasyarat
-1. **VS Code** dengan extension PlatformIO
-2. **PlatformIO CLI** terinstal
-3. **USB Cable** untuk upload kode
+## ESP32
 
-### Langkah 1: Persiapan Lingkungan
-
-```bash
-# Buka folder proyek
-cd CYD_LVGL_Arduino
-
-# Verifikasi board terhubung
-pio device list
-```
-
-### Langkah 2: Instalasi Library
-
-Library sudah terdaftar di `platformio.ini`, akan otomatis terinstall saat build:
-- ✅ `bodmer/TFT_eSPI` - Driver display
-- ✅ `paulstoffregen/XPT2046_Touchscreen` - Touch controller
-- ✅ `bblanchon/ArduinoJson` - JSON processing
-
-### Langkah 3: Build & Upload
-
-```bash
-# Build proyek (cek syntax)
-pio run
-
-# Upload ke board
-pio run -t upload
-
-# Monitor Serial Output
-pio device monitor --baud 115200
-```
+| Spesifikasi | Nilai           |
+| ----------- | --------------- |
+| MCU         | ESP32 Dual Core |
+| Clock       | 240 MHz         |
+| RAM         | 520 KB SRAM     |
+| Flash       | 4 MB            |
+| ADC         | 12-bit          |
 
 ---
 
-## ⚙️ Konfigurasi Pin
+## TFT Display — ILI9342
 
-### File Konfigurasi Utama
+| Spesifikasi | Nilai   |
+| ----------- | ------- |
+| Resolusi    | 320×240 |
+| Driver      | ILI9342 |
+| Interface   | SPI     |
+| Tegangan    | 3.3V    |
 
-#### 1. `platformio.ini` - Build Configuration
+### Koneksi TFT
+
+| Pin TFT | GPIO ESP32 |
+| ------- | ---------- |
+| MISO    | 12         |
+| MOSI    | 13         |
+| SCLK    | 14         |
+| CS      | 15         |
+| DC      | 2          |
+| BL      | 27         |
+
+---
+
+## Touchscreen — XPT2046
+
+| Pin Touch | GPIO ESP32 |
+| --------- | ---------- |
+| CS        | 33         |
+| DIN       | 13         |
+| DOUT      | 12         |
+| CLK       | 14         |
+
+---
+
+## Sensor LDR
+
+| Pin    | GPIO |
+| ------ | ---- |
+| Signal | 34   |
+
+---
+
+## SD Card (Optional)
+
+| Pin SD | GPIO ESP32 |
+| ------ | ---------- |
+| CS     | 5          |
+| MOSI   | 13         |
+| MISO   | 12         |
+| CLK    | 14         |
+
+---
+
+# ⚙️ Konfigurasi Pin
+
+## `platformio.ini`
+
 ```ini
 [env:esp32dev]
 platform = espressif32
 board = esp32dev
 framework = arduino
+
 monitor_speed = 115200
 
-lib_deps = 
+lib_deps =
     bodmer/TFT_eSPI
     paulstoffregen/XPT2046_Touchscreen
     bblanchon/ArduinoJson
@@ -142,90 +116,123 @@ lib_deps =
 build_flags =
     -D USER_SETUP_LOADED=1
     -D ILI9342_DRIVER=1
+
     -D TFT_WIDTH=320
     -D TFT_HEIGHT=240
+
     -D TFT_MISO=12
     -D TFT_MOSI=13
     -D TFT_SCLK=14
     -D TFT_CS=15
     -D TFT_DC=2
     -D TFT_RST=-1
+
     -D TFT_BL=27
     -D TFT_BACKLIGHT_ON=1
+
     -D TOUCH_CS=33
-    -D TFT_RGB_ORDER=TFT_RGB
+
     -D SPI_FREQUENCY=27000000
     -D SPI_READ_FREQUENCY=20000000
     -D SPI_TOUCH_FREQUENCY=2500000
 ```
 
-**Keterangan:**
-- `ILI9342_DRIVER=1` → Driver display yang digunakan
-- `TFT_BL=27` → GPIO untuk backlight
-- `TOUCH_CS=33` → GPIO untuk touchscreen chip select
-- `SPI_FREQUENCY` → Kecepatan komunikasi (27MHz untuk display, 2.5MHz untuk touch)
+---
 
-#### 2. `src/main.cpp` - Pin Definition
+## `src/main.cpp`
+
 ```cpp
-#define LDR_PIN 34        // Sensor LDR
-#define SD_CS 5           // SD Card chip select
-#define TOUCH_CS 33       // Touchscreen chip select
+#define LDR_PIN   34
+#define SD_CS      5
+#define TOUCH_CS  33
 ```
-
-### Modifikasi Pin (Jika Diperlukan)
-
-**Untuk mengubah pin:**
-
-1. Edit `platformio.ini` - ubah `build_flags`
-   ```ini
-   -D TFT_MISO=12    # Ubah ke GPIO yang diinginkan
-   ```
-
-2. Edit `src/main.cpp` - ubah `#define`
-   ```cpp
-   #define LDR_PIN 34    // Ubah ke GPIO yang tersedia
-   ```
-
-3. Rebuild dan upload
-   ```bash
-   pio run -t upload
-   ```
 
 ---
 
-## ✨ Fitur Utama
+# 🚀 Setup Project
 
-### 1. 📊 Display TFT (320×240)
-- **Fungsi:** Menampilkan informasi visual real-time
-- **Update Rate:** ~200ms (5 FPS)
-- **Output:** Nilai sensor, grafik, status sistem
-- **Library:** TFT_eSPI (Bodmer)
+## 1. Install Software
 
-**Contoh Kode:**
+Yang dibutuhkan:
+
+* VS Code
+* PlatformIO Extension
+* Driver USB CH340 / CP210x
+
+---
+
+## 2. Clone Project
+
+```bash
+git clone https://github.com/username/CYD_LVGL_Arduino.git
+cd CYD_LVGL_Arduino
+```
+
+---
+
+## 3. Cek Board
+
+```bash
+pio device list
+```
+
+---
+
+# 🔨 Build & Upload
+
+## Build Project
+
+```bash
+pio run
+```
+
+## Upload Firmware
+
+```bash
+pio run -t upload
+```
+
+## Serial Monitor
+
+```bash
+pio device monitor --baud 115200
+```
+
+---
+
+# ✨ Fitur
+
+## 📺 TFT Display
+
+Menggunakan library `TFT_eSPI`.
+
+### Contoh
+
 ```cpp
 #include <TFT_eSPI.h>
+
 TFT_eSPI tft = TFT_eSPI();
 
 void setup() {
     tft.init();
     tft.setRotation(1);
     tft.fillScreen(TFT_BLACK);
-}
 
-void loop() {
     tft.drawString("Hello World", 10, 10, 2);
 }
 ```
 
-### 2. 🖱️ Touchscreen Input
-- **Fungsi:** Deteksi sentuhan untuk interaksi user
-- **Resolusi:** 12-bit (4096 step)
-- **Kalibrasi:** Ada di `test/3_kalibrasi_touchscreen.cpp`
-- **Library:** XPT2046_Touchscreen
+---
 
-**Contoh Kode:**
+## 👆 Touchscreen
+
+Menggunakan `XPT2046_Touchscreen`.
+
+### Contoh
+
 ```cpp
 #include <XPT2046_Touchscreen.h>
+
 XPT2046_Touchscreen ts(TOUCH_CS);
 
 void setup() {
@@ -236,321 +243,293 @@ void setup() {
 void loop() {
     if (ts.touched()) {
         TS_Point p = ts.getPoint();
-        Serial.printf("X: %d, Y: %d\n", p.x, p.y);
+
+        Serial.printf(
+            "X: %d Y: %d\n",
+            p.x,
+            p.y
+        );
     }
 }
 ```
 
-### 3. 💡 Sensor LDR
-- **Fungsi:** Membaca intensitas cahaya
-- **Pin:** GPIO 34 (ADC0)
-- **Range:** 0-4095 (12-bit)
-- **Mapping:** 0-4095 → 0-100% atau 100-0% (inverse)
+---
 
-**Contoh Kode:**
+## 💡 Sensor LDR
+
+### Contoh
+
 ```cpp
 #define LDR_PIN 34
 
 void loop() {
     int raw = analogRead(LDR_PIN);
-    int percent = map(raw, 0, 4095, 100, 0);  // Inverse
+
+    int percent = map(
+        raw,
+        0,
+        4095,
+        100,
+        0
+    );
+
     percent = constrain(percent, 0, 100);
-    Serial.printf("Light: %d%%\n", percent);
+
+    Serial.printf(
+        "Light: %d%%\n",
+        percent
+    );
 }
 ```
 
-### 4. 📡 WiFi & Cloud
-- **Fungsi:** Koneksi internet untuk sinkronisasi data
-- **NTP Time:** Sinkronisasi waktu ke server (UTC+7 WIB)
-- **HTTP Client:** Fetch data dari cloud
-- **JSON Parsing:** Proses data dari API
+---
 
-**Konfigurasi WiFi:**
+## 📡 WiFi
+
+### Contoh
+
 ```cpp
+#include <WiFi.h>
+
 const char* ssid = "YOUR_SSID";
 const char* password = "YOUR_PASSWORD";
-const char* ntpServer = "pool.ntp.org";
 
 void connectWiFi() {
+
     WiFi.begin(ssid, password);
+
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
-    Serial.println("\nWiFi Connected!");
+
+    Serial.println("\nWiFi Connected");
 }
 ```
 
-### 5. 💾 SD Card Storage
-- **Fungsi:** Penyimpanan data lokal
-- **Format:** FAT32
-- **Pin CS:** GPIO 5
-- **Operasi:** Read/Write file data
+---
 
-**Contoh Kode:**
+## 💾 SD Card
+
+### Contoh
+
 ```cpp
 #include <SD.h>
+
 #define SD_CS 5
 
 void setup() {
+
     if (!SD.begin(SD_CS)) {
-        Serial.println("SD Card failed!");
+        Serial.println("SD Card Failed");
+        return;
     }
-}
 
-void writeToSD(String filename, String data) {
-    File file = SD.open(filename, FILE_WRITE);
-    if (file) {
-        file.println(data);
-        file.close();
-    }
+    Serial.println("SD Card OK");
 }
 ```
 
 ---
 
-## 💻 Cara Menggunakan
+# 🧪 Testing
 
-### Quick Start
+Folder `test/` berisi beberapa contoh pengujian hardware.
 
-**1. Persiapan Hardware**
-```
-Koneksikan:
-├── ESP32 → USB Cable → Komputer
-├── TFT Display → SPI Pins (12,13,14,15,2)
-├── Touchscreen → GPIO 33 (+ MISO/MOSI/SCLK shared)
-├── LDR Sensor → GPIO 34 (+ GND)
-└── (Optional) SD Card → GPIO 5 (+ MISO/MOSI/SCLK shared)
-```
-
-**2. Edit Konfigurasi WiFi** (jika diperlukan)
-```cpp
-// Di src/main.cpp
-const char* ssid = "YOUR_SSID";
-const char* password = "YOUR_PASSWORD";
-```
-
-**3. Build & Upload**
-```bash
-pio run -t upload
-```
-
-**4. Monitor Serial Output**
-```bash
-pio device monitor --baud 115200
-```
-
-### Testing Individual Features
-
-Gunakan file test yang tersedia di folder `test/`:
+## Test TFT
 
 ```bash
-# Test TFT Display
-cd test
-pio run -c platformio.ini -e esp32dev --project-dir . -c 1_test_tft.cpp
+pio run -e esp32dev -t upload --project-dir test/1_test_tft
+```
 
-# Test Touchscreen
-pio run -c platformio.ini -e esp32dev --project-dir . -c 2_test_touchscreen.cpp
+## Test Touchscreen
 
-# Kalibrasi Touchscreen
-pio run -c platformio.ini -e esp32dev --project-dir . -c 3_kalibrasi_touchscreen.cpp
+```bash
+pio run -e esp32dev -t upload --project-dir test/2_test_touchscreen
+```
 
-# Test LDR Sensor
-pio run -c platformio.ini -e esp32dev --project-dir . -c 8_test_ldr_sensor.cpp
+## Kalibrasi Touchscreen
+
+```bash
+pio run -e esp32dev -t upload --project-dir test/3_kalibrasi_touchscreen
+```
+
+## Test LDR
+
+```bash
+pio run -e esp32dev -t upload --project-dir test/8_test_ldr_sensor
 ```
 
 ---
 
-## 🔍 Troubleshooting
+# 🔍 Troubleshooting
 
-### ❌ Display Tidak Menyala
+## ❌ Display Tidak Menyala
 
-**Kemungkinan Penyebab:**
-1. **Pin salah** → Verifikasi pin di `platformio.ini`
-2. **Driver salah** → Pastikan `ILI9342_DRIVER=1`
-3. **Backlight off** → Cek GPIO 27 dan tegangan
-4. **Koneksi longgar** → Periksa kabel SPI
+### Penyebab
 
-**Solusi:**
+* Pin salah
+* Driver salah
+* Backlight mati
+* Kabel SPI longgar
+
+### Solusi
+
 ```cpp
-// Di setup(), cek backlight
 pinMode(27, OUTPUT);
-digitalWrite(27, HIGH);  // Nyalakan backlight
-
-// Cek inisialisasi
-void setup() {
-    Serial.begin(115200);
-    delay(1000);
-    tft.init();
-    tft.setRotation(1);
-    Serial.println("TFT Initialized");
-}
+digitalWrite(27, HIGH);
 ```
 
-### ❌ Touchscreen Tidak Responsif
+Pastikan:
 
-**Kemungkinan Penyebab:**
-1. **Belum dikalibrasi** → Jalankan calibration test
-2. **Pin CS salah** → Verifikasi GPIO 33
-3. **Library versi lama** → Update XPT2046_Touchscreen
-
-**Solusi:**
-```bash
-# Jalankan kalibrasi
-pio run -c platformio.ini -e esp32dev -c 3_kalibrasi_touchscreen.cpp
+```ini
+-D ILI9342_DRIVER=1
 ```
 
-### ❌ LDR Memberikan Nilai Aneh
+---
 
-**Kemungkinan Penyebab:**
-1. **ADC belum dikonfigurasi** → Set resolution
-2. **Noise dari rangkaian** → Tambah capacitor filter
-3. **Pin salah** → Verifikasi GPIO 34
+## ❌ Touchscreen Tidak Responsif
 
-**Solusi:**
+### Solusi
+
+* Pastikan `TOUCH_CS=33`
+* Jalankan file kalibrasi
+* Update library touchscreen
+
+---
+
+## ❌ LDR Tidak Stabil
+
+Gunakan averaging:
+
 ```cpp
-void setup() {
-    analogReadResolution(12);  // Set 12-bit resolution
-    analogSetPinAttenuation(ADC_11db, LDR_PIN);  // Set attenuation
+int total = 0;
+
+for (int i = 0; i < 10; i++) {
+    total += analogRead(LDR_PIN);
+    delay(10);
 }
 
-void loop() {
-    // Read multiple samples & average
-    int total = 0;
-    for (int i = 0; i < 10; i++) {
-        total += analogRead(LDR_PIN);
-        delay(10);
-    }
-    int raw = total / 10;
-}
+int raw = total / 10;
 ```
 
-### ❌ WiFi Tidak Terhubung
+---
 
-**Kemungkinan Penyebab:**
-1. **SSID/Password salah** → Verifikasi konfigurasi
-2. **WiFi 5GHz** → Ubah ke 2.4GHz
-3. **Signal lemah** → Dekat dengan router
+## ❌ WiFi Tidak Connect
 
-**Solusi:**
+### Penyebab
+
+* SSID/password salah
+* Router 5GHz
+* Signal lemah
+
+### Solusi
+
 ```cpp
-void connectWiFi() {
-    Serial.println("Connecting to WiFi...");
-    WiFi.begin(ssid, password);
-    
-    int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 20) {
-        delay(500);
-        Serial.print(".");
-        attempts++;
-    }
-    
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("\nWiFi Connected!");
-        Serial.print("IP: ");
-        Serial.println(WiFi.localIP());
-    } else {
-        Serial.println("\nFailed to connect");
-    }
-}
+WiFi.begin(ssid, password);
 ```
 
-### ❌ Upload Gagal
+Gunakan WiFi 2.4GHz.
 
-**Kemungkinan Penyebab:**
-1. **Driver USB hilang** → Install CH340 driver
-2. **Port salah** → Gunakan `pio device list` untuk cek
-3. **Baud rate salah** → Sesuaikan di platformio.ini
+---
 
-**Solusi:**
+## ❌ Upload Gagal
+
+### Solusi
+
+Cek port:
+
 ```bash
-# List port yang tersedia
 pio device list
+```
 
-# Upload dengan verbose mode
-pio run -t upload -v
+Upload manual:
 
-# Upload ke port spesifik
+```bash
 pio run -t upload --upload-port COM3
 ```
 
----
+Jika gagal:
 
-## 📚 Referensi dan Resources
-
-| Resource | Link |
-|----------|------|
-| TFT_eSPI Library | https://github.com/Bodmer/TFT_eSPI |
-| XPT2046 Library | https://github.com/PaulStoffregen/XPT2046_Touchscreen |
-| ESP32 Documentation | https://docs.espressif.com/ |
-| Arduino JSON | https://arduinojson.org/ |
-| PlatformIO | https://platformio.org/ |
+* Install driver CH340
+* Ganti kabel USB
+* Tekan tombol BOOT saat upload
 
 ---
 
-## 🎓 Tips & Tricks
+# ⚡ Tips Optimasi
 
-### 1. Optimasi Display Update
+## Jangan Refresh Full Screen
+
+❌ Lambat:
+
 ```cpp
-// ❌ LAMBAT - Full screen refresh setiap loop
-tft.fillScreen(TFT_BLACK);  // Jangan lakukan ini!
-
-// ✅ CEPAT - Hanya update area yang berubah
-tft.fillRect(20, 60, 280, 24, TFT_BLACK);  // Clear only bar area
-tft.fillRect(22, 62, fillW, 20, TFT_GREEN);  // Draw bar
+tft.fillScreen(TFT_BLACK);
 ```
 
-### 2. Reduce Memory Usage
-```cpp
-// Gunakan PROGMEM untuk string konstant
-const char* text PROGMEM = "Hello";
-Serial.println(FPSTR(text));
+✅ Lebih cepat:
 
-// Hindari String objects yang besar
-char buffer[50];
+```cpp
+tft.fillRect(
+    20,
+    60,
+    280,
+    24,
+    TFT_BLACK
+);
+```
+
+---
+
+## Hindari String Besar
+
+❌
+
+```cpp
+String text = "Hello";
+```
+
+✅
+
+```cpp
+char buffer[32];
 sprintf(buffer, "Value: %d", value);
-tft.drawString(buffer, 10, 10, 2);
 ```
 
-### 3. Debugging dengan Serial
+---
+
+## Debug Macro
+
 ```cpp
 #define DEBUG 1
+
 #if DEBUG
     #define DEBUGLN(x) Serial.println(x)
-    #define DEBUG_PRINTF(...) Serial.printf(__VA_ARGS__)
 #else
     #define DEBUGLN(x)
-    #define DEBUG_PRINTF(...)
 #endif
-
-// Usage
-DEBUGLN("Starting setup...");
-DEBUG_PRINTF("Raw ADC: %d\n", raw);
-```
-
-### 4. Kalibrasi LDR
-```cpp
-int raw_min = 0;     // Minimum ADC reading (dalam gelap)
-int raw_max = 4095;  // Maximum ADC reading (cahaya penuh)
-
-int calibratedPercent = map(raw, raw_min, raw_max, 0, 100);
-calibratedPercent = constrain(calibratedPercent, 0, 100);
 ```
 
 ---
 
-## 📞 Support & Issues
+# 📚 Referensi
 
-Jika menemukan masalah:
-1. Cek **Serial Monitor** untuk error messages
-2. Verifikasi **pin configuration** di platformio.ini
-3. Test dengan **file test** yang tersedia
-4. Gunakan **debug output** untuk trace code execution
+* [TFT_eSPI Library](https://github.com/Bodmer/TFT_eSPI?utm_source=chatgpt.com)
+* [XPT2046 Touchscreen Library](https://github.com/PaulStoffregen/XPT2046_Touchscreen?utm_source=chatgpt.com)
+* [ArduinoJson](https://arduinojson.org/?utm_source=chatgpt.com)
+* [ESP32 Documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/?utm_source=chatgpt.com)
+* [PlatformIO](https://platformio.org/?utm_source=chatgpt.com)
 
 ---
 
-**Last Updated:** May 2026  
-**Version:** 1.0  
-**Project:** CYD_LVGL_Arduino
-#   C Y D _ E S P 3 2 _ R E S I T I V E _ C L O N E _ B  
- 
+# 📌 Catatan
+
+* Gunakan power supply stabil 5V
+* Hindari kabel SPI terlalu panjang
+* Gunakan averaging ADC untuk hasil sensor lebih stabil
+* LVGL lebih optimal jika menggunakan partial redraw
+
+---
+
+**Version:** 1.0
+**Updated:** May 2026
+**Board:** ESP32 + CYD Display
